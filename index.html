@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>مشاركة الرابط</title>
+    <style>
+        /* أنماط CSS كما في الأمثلة السابقة */
+        .container { /* ... */ }
+        #link { /* ... */ }
+        #copyButton { /* ... */ }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <input type="text" id="link" readonly>
+        <button id="copyButton">نسخ</button>
+    </div>
+
+    <script>
+        // هذا الكود يعمل الآن بشكل مختلف تمامًا
+
+        // الحصول على معلومات من Telegram Web Apps API
+        const webApp = Telegram.WebApp;
+        const initData = webApp.initDataUnsafe;
+
+        // الحصول على معرف المستخدم (إذا كان متاحًا)
+        const userId = initData?.user?.id;
+
+        // إنشاء الرابط (مع اسم مستخدم البوت الثابت)
+        const botUsername = "hrummebot"; // **يجب عليك تغيير هذا إلى اسم مستخدم بوتك**
+        let link = `http://t.me/${botUsername}/game?startapp=ref`;
+
+        // إضافة معرف المستخدم إلى الرابط إذا كان متاحًا
+        if (userId) {
+            link += userId;
+        } else {
+          link += "غير متوفر"; // أو أي رسالة أخرى مناسبة
+          alert("معرف المستخدم غير متوفر. قد لا يعمل الرابط بشكل صحيح.");
+        }
+
+
+        // وضع الرابط في حقل الإدخال
+        const linkInput = document.getElementById('link');
+        linkInput.value = link;
+
+        // تفعيل زر النسخ
+        const copyButton = document.getElementById('copyButton');
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(link).then(() => {
+                alert("تم نسخ الرابط!");
+            }).catch(err => {
+                console.error('فشل في نسخ النص: ', err);
+                alert("فشل في نسخ الرابط!");
+            });
+        });
+    </script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</body>
+</html>
